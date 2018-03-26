@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        // 截取视频的前500帧
-        final String cmd = "ffmpeg -i " + path + "/video.mp4 -vframes 500 -y -f gif -s 480×320 " + path + "/video_500.gif";
+        // 截取视频的前100帧
+        final String cmd = "ffmpeg -i " + path + "/video.mp4 -vframes 100 -y -f gif -s 480×320 " + path + "/video_100.gif";
         // 显示loading
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("截取中...");
