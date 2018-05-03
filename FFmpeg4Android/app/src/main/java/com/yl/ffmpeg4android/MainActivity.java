@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 super.run();
                 // 执行指令
-                cmdRun(cmd);
+                int a  = cmdRun(cmd);
+                Log.i("执行命令",a+"");
 
                 // 隐藏loading
                 runOnUiThread(new Runnable() {
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         // 显示gif
                         Glide.with(MainActivity.this)
-                                .load(new File(path + "/video_500.gif"))
+                                .load(new File(path + "/video_100.gif"))
                                 .into(ivGif);
                     }
                 });

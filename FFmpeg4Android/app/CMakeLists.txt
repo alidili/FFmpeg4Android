@@ -7,6 +7,31 @@ set(CPP_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp)
 # 设置jniLibs目录路径
 set(LIBS_DIR ${CMAKE_SOURCE_DIR}/src/main/jniLibs)
 
+# 设置CPU目录 armeabi
+if(${ANDROID_ABI} STREQUAL "armeabi")
+set(CPU_DIR armeabi)
+endif(${ANDROID_ABI} STREQUAL "armeabi")
+
+# armeabi-v7a
+if(${ANDROID_ABI} STREQUAL "armeabi-v7a")
+set(CPU_DIR armeabi-v7a)
+endif(${ANDROID_ABI} STREQUAL "armeabi-v7a")
+
+# arm64-v8a
+if(${ANDROID_ABI} STREQUAL "arm64-v8a")
+set(CPU_DIR arm64-v8a)
+endif(${ANDROID_ABI} STREQUAL "arm64-v8a")
+
+# x86
+if(${ANDROID_ABI} STREQUAL "x86")
+set(CPU_DIR x86)
+endif(${ANDROID_ABI} STREQUAL "x86")
+
+# x86_64
+if(${ANDROID_ABI} STREQUAL "x86_64")
+set(CPU_DIR x86_64)
+endif(${ANDROID_ABI} STREQUAL "x86_64")
+
 # 添加库
 add_library( # 库名称
              ffmpeg
@@ -37,7 +62,7 @@ set_target_properties( # 库名称
 
                        # 库的路径
                        PROPERTIES IMPORTED_LOCATION
-                       ${LIBS_DIR}/armeabi/libavcodec.so )
+                       ${LIBS_DIR}/${CPU_DIR}/libavcodec.so )
 
 # 用于各种音视频封装格式的生成和解析，读取音视频帧等功能
 add_library( avformat
@@ -46,7 +71,7 @@ add_library( avformat
 
 set_target_properties( avformat
                        PROPERTIES IMPORTED_LOCATION
-                       ${LIBS_DIR}/armeabi/libavformat.so )
+                       ${LIBS_DIR}/${CPU_DIR}/libavformat.so )
 
 # 包含一些公共的工具函数
 add_library( avutil
@@ -55,7 +80,7 @@ add_library( avutil
 
 set_target_properties( avutil
                        PROPERTIES IMPORTED_LOCATION
-                       ${LIBS_DIR}/armeabi/libavutil.so )
+                       ${LIBS_DIR}/${CPU_DIR}/libavutil.so )
 
 # 提供了各种音视频过滤器
 add_library( avfilter
@@ -64,7 +89,7 @@ add_library( avfilter
 
 set_target_properties( avfilter
                        PROPERTIES IMPORTED_LOCATION
-                       ${LIBS_DIR}/armeabi/libavfilter.so )
+                       ${LIBS_DIR}/${CPU_DIR}/libavfilter.so )
 
 # 用于音频重采样，采样格式转换和混合
 add_library( swresample
@@ -73,7 +98,7 @@ add_library( swresample
 
 set_target_properties( swresample
                        PROPERTIES IMPORTED_LOCATION
-                       ${LIBS_DIR}/armeabi/libswresample.so )
+                       ${LIBS_DIR}/${CPU_DIR}/libswresample.so )
 
 # 用于视频场景比例缩放、色彩映射转换
 add_library( swscale
@@ -82,7 +107,7 @@ add_library( swscale
 
 set_target_properties( swscale
                        PROPERTIES IMPORTED_LOCATION
-                       ${LIBS_DIR}/armeabi/libswscale.so )
+                       ${LIBS_DIR}/${CPU_DIR}/libswscale.so )
 
 # 引用源码 ../代表上级目录
 include_directories( ../../ffmpeg-3.4.2/
