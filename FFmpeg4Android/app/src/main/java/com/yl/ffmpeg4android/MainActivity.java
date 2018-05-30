@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 super.run();
                 // 执行指令
-                int a  = cmdRun(cmd);
-                Log.i("执行命令",a+"");
+                int a = cmdRun(cmd);
+                Log.i("执行命令", a + "");
 
                 // 隐藏loading
                 runOnUiThread(new Runnable() {
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private int cmdRun(String cmd) {
         String regulation = "[ \\t]+";
-        final String[] split = cmd.split(regulation);
+        String[] split = cmd.split(regulation);
         return run(split);
     }
 
