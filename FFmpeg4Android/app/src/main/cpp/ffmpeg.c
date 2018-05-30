@@ -603,20 +603,9 @@ static void ffmpeg_cleanup(int ret) {
     av_freep(&vstats_filename);
 
     av_freep(&input_streams);
-    input_streams = NULL;
-    nb_input_streams = 0;
-
     av_freep(&input_files);
-    input_files = NULL;
-    nb_input_files = 0;
-
     av_freep(&output_streams);
-    output_streams = NULL;
-    nb_output_streams = 0;
-
     av_freep(&output_files);
-    output_files = NULL;
-    nb_output_files = 0;
 
     uninit_opts();
 
@@ -4882,6 +4871,21 @@ int run(int argc, char **argv) {
         exit_program(69);
 
     exit_program(received_nb_signals ? 255 : main_return_code);
+
+    nb_filtergraphs = 0;
+    nb_input_streams = 0;
+    nb_input_files = 0;
+    progress_avio = NULL;
+
+    input_streams = NULL;
+    nb_input_streams = 0;
+    input_files = NULL;
+    nb_input_files = 0;
+
+    output_streams = NULL;
+    nb_output_streams = 0;
+    output_files = NULL;
+    nb_output_files = 0;
 
     return main_return_code;
 }

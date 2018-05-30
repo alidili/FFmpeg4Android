@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Glide.with(MainActivity.this).clear(ivGif);
+
         // 截取视频的前100帧
         final String cmd = "ffmpeg -i " + path + "/video.mp4 -vframes 100 -y -f gif -s 480×320 " + path + "/video_100.gif";
         // 显示loading
