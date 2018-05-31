@@ -110,7 +110,7 @@ set_target_properties( swscale
                        ${LIBS_DIR}/${CPU_DIR}/libswscale.so )
 
 # 引用源码 ../代表上级目录
-include_directories( ../../ffmpeg-3.4.2/
+include_directories( ../../ffmpeg-4.0/
                      ${CPP_DIR}/include/ )
 
 # 关联库

@@ -71,7 +71,6 @@ void init_dynload(void);
  * allocate the *_opts contexts.
  */
 void init_opts(void);
-
 /**
  * Uninitialize the cmdutils option system, in particular
  * free the *_opts contexts and their contents.
@@ -82,7 +81,7 @@ void uninit_opts(void);
  * Trivial log callback.
  * Only suitable for opt_help and similar since it lacks prefix handling.
  */
-void log_callback_help(void *ptr, int level, const char *fmt, va_list vl);
+void log_callback_help(void* ptr, int level, const char* fmt, va_list vl);
 
 /**
  * Override the cpuflags.
@@ -105,12 +104,6 @@ int opt_report(const char *opt);
 int opt_max_alloc(void *optctx, const char *opt, const char *arg);
 
 int opt_codec_debug(void *optctx, const char *opt, const char *arg);
-
-#if CONFIG_OPENCL
-int opt_opencl(void *optctx, const char *opt, const char *arg);
-
-int opt_opencl_bench(void *optctx, const char *opt, const char *arg);
-#endif
 
 /**
  * Limit the execution time.
@@ -154,10 +147,11 @@ typedef struct SpecifierOpt {
     char *specifier;    /**< stream/chapter/program/... specifier */
     union {
         uint8_t *str;
-        int i;
-        int64_t i64;
-        float f;
-        double dbl;
+        int        i;
+        int64_t  i64;
+        uint64_t ui64;
+        float      f;
+        double   dbl;
     } u;
 } SpecifierOpt;
 
@@ -186,15 +180,11 @@ typedef struct OptionDef {
 #define OPT_DOUBLE 0x20000
 #define OPT_INPUT  0x40000
 #define OPT_OUTPUT 0x80000
-
-    union {
+     union {
         void *dst_ptr;
-
         int (*func_arg)(void *, const char *, const char *);
-
         size_t off;
     } u;
-
     const char *help;
     const char *argname;
 } OptionDef;
@@ -210,17 +200,6 @@ typedef struct OptionDef {
  */
 void show_help_options(const OptionDef *options, const char *msg, int req_flags,
                        int rej_flags, int alt_flags);
-
-#if CONFIG_OPENCL
-#define CMDUTILS_COMMON_OPTIONS_OPENCL                                                                                  \
-    { "opencl_bench", OPT_EXIT, {.func_arg = opt_opencl_bench},                                                         \
-       "run benchmark on all OpenCL devices and show results" },                                                        \
-    { "opencl_options", HAS_ARG, {.func_arg = opt_opencl},                                                              \
-       "set OpenCL environment options" },                                                                              \
-
-#else
-#define CMDUTILS_COMMON_OPTIONS_OPENCL
-#endif
 
 #if CONFIG_AVDEVICE
 #define CMDUTILS_COMMON_OPTIONS_AVDEVICE                                                                                \
@@ -261,9 +240,7 @@ void show_help_options(const OptionDef *options, const char *msg, int req_flags,
     { "max_alloc",   HAS_ARG,              { .func_arg = opt_max_alloc },    "set maximum size of a single allocated block", "bytes" }, \
     { "cpuflags",    HAS_ARG | OPT_EXPERT, { .func_arg = opt_cpuflags },     "force specific cpu flags", "flags" },     \
     { "hide_banner", OPT_BOOL | OPT_EXPERT, {&hide_banner},     "do not show program banner", "hide_banner" },          \
-    CMDUTILS_COMMON_OPTIONS_OPENCL                                                                                      \
     CMDUTILS_COMMON_OPTIONS_AVDEVICE                                                                                    \
-
 
 /**
  * Show help for all options with given flags in class and all its
@@ -295,7 +272,7 @@ int show_help(void *optctx, const char *opt, const char *arg);
  * not have to be processed.
  */
 void parse_options(void *optctx, int argc, char **argv, const OptionDef *options,
-                   void (*parse_arg_function)(void *optctx, const char *));
+                   void (* parse_arg_function)(void *optctx, const char*));
 
 /**
  * Parse one given option.
@@ -311,9 +288,9 @@ int parse_option(void *optctx, const char *opt, const char *arg,
  * used multiple times.
  */
 typedef struct Option {
-    const OptionDef *opt;
-    const char *key;
-    const char *val;
+    const OptionDef  *opt;
+    const char       *key;
+    const char       *val;
 } Option;
 
 typedef struct OptionGroupDef {
@@ -336,7 +313,7 @@ typedef struct OptionGroup {
     const char *arg;
 
     Option *opts;
-    int nb_opts;
+    int  nb_opts;
 
     AVDictionary *codec_opts;
     AVDictionary *format_opts;
@@ -353,14 +330,14 @@ typedef struct OptionGroupList {
     const OptionGroupDef *group_def;
 
     OptionGroup *groups;
-    int nb_groups;
+    int       nb_groups;
 } OptionGroupList;
 
 typedef struct OptionParseContext {
     OptionGroup global_opts;
 
     OptionGroupList *groups;
-    int nb_groups;
+    int           nb_groups;
 
     /* parsing state */
     OptionGroup cur_group;
@@ -647,6 +624,9 @@ void *grow_array(void *array, int elem_size, int *size, int new_size);
 
 #define GET_PIX_FMT_NAME(pix_fmt)\
     const char *name = av_get_pix_fmt_name(pix_fmt);
+
+#define GET_CODEC_NAME(id)\
+    const char *name = avcodec_descriptor_get(id)->name;
 
 #define GET_SAMPLE_FMT_NAME(sample_fmt)\
     const char *name = av_get_sample_fmt_name(sample_fmt)
